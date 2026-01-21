@@ -1,17 +1,21 @@
-FROM nginx:alpine
+FROM python:3.9-slim
 
-# Curățăm folderul Nginx
-RUN rm -rf /usr/share/nginx/html/*
+WORKDIR /app
 
-# Copiem TOT conținutul din repository pentru a fi siguri
-COPY . /usr/share/nginx/html/
+# Instalăm dependențele necesare
+# Verifică dacă ai un fișier requirements.txt pe GitHub
+COPY ./opensource/whois_server/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt || pip install flask gunicorn
 
-# Forțăm găsirea unui punct de intrare indiferent unde este ascuns
-# Această comandă caută primul fișier .html găsit în subfoldere și îl pune ca index
-RUN find /usr/share/nginx/html -name "login.html" -exec cp {} /usr/share/nginx/html/index.html \;
+# Copiem tot proiectul
+COPY . .
 
-# Setăm permisiuni globale
-RUN chmod -R 755 /usr/share/nginx/html
+# Ne mutăm unde este logica serverului
+WORKDIR /app/opensource/whois_server
 
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# Setăm variabila de port pentru Koyeb
+ENV PORT=80
+
+# Pornim aplicația folosind Gunicorn (recomandat pentru producție) sau direct Python
+# Verifică dacă fișierul principal se numește app.py sau main.py
+CMD ["python", "app.py"]
