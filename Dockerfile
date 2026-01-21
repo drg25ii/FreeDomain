@@ -1,15 +1,15 @@
-# Pasul 1: Folosim o imagine ușoară de Nginx
+
 FROM nginx:alpine
 
-# Pasul 2: Ștergem fișierele implicite ale Nginx
+# Ștergem conținutul vechi
 RUN rm -rf /usr/share/nginx/html/*
 
-# Pasul 3: Copiem tot conținutul proiectului în folderul de servire Nginx
-# Aceasta va include fișierele .html și restul resurselor
+# Copiem tot conținutul proiectului
 COPY . /usr/share/nginx/html/
 
-# Pasul 4: Expunem portul 80 pentru trafic web
-EXPOSE 80
+# VERIFICARE: Dacă fișierele tale sunt într-un folder numit 'templates' (specific Flask), 
+# trebuie să le scoatem la suprafață. Adaugă această linie dacă eroarea persistă:
+# RUN mv /usr/share/nginx/html/templates/* /usr/share/nginx/html/ || true
 
-# Pasul 5: Pornim serverul Nginx
+EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
