@@ -1,3 +1,5 @@
+app_port: 80
+
 ## 🌐 Welcome to DigitalPlat Domain
 
 <div align="center">
