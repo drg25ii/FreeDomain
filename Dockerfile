@@ -5,7 +5,7 @@ FROM nginx:alpine
 RUN rm -rf /usr/share/nginx/html/*
 
 # Copiem tot conținutul proiectului
-COPY . /usr/share/nginx/html/
+COPY ./opensource/ /usr/share/nginx/html/
 
 # VERIFICARE: Dacă fișierele tale sunt într-un folder numit 'templates' (specific Flask), 
 # trebuie să le scoatem la suprafață. Adaugă această linie dacă eroarea persistă:
