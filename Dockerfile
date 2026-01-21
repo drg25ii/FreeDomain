@@ -1,16 +1,15 @@
 FROM python:3.9-slim
 WORKDIR /app
-
-# Copiem tot proiectul
 COPY . .
-
-# Instalăm dependențele de bază
 RUN pip install flask gunicorn
 
-# Setăm variabila de port pentru Koyeb
+# Forțăm Flask să ruleze pe portul 80 și pe toate interfețele (0.0.0.0)
 ENV PORT=80
 EXPOSE 80
 
-# COMANDĂ UNIVERSALĂ: 
-# Caută orice fișier .py care conține "app" sau "main" și îl pornește
-CMD ["sh", "-c", "python $(find . -name 'app.py' -o -name 'main.py' -o -name 'server.py' | head -n 1)"]
+WORKDIR /app/opensource/whois_server
+
+# Modificăm comanda să specifice portul și host-ul
+CMD ["python", "app.py", "--host=0.0.0.0", "--port=80"]
+# SAU dacă folosești gunicorn:
+# CMD ["gunicorn", "--bind", "0.0.0.0:80", "app:app"]
