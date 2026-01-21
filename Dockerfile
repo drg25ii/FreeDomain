@@ -1,4 +1,3 @@
-
 FROM nginx:alpine
 
 # 1. Curățăm folderul Nginx
