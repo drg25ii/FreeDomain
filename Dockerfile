@@ -1,18 +1,16 @@
 FROM nginx:alpine
 
-# Curățăm folderul implicit
+# Curățăm folderul Nginx
 RUN rm -rf /usr/share/nginx/html/*
 
-# Copiem tot ce ai în folderul frontend
-COPY ./opensource/frontend/ /usr/share/nginx/html/
+# Copiem TOT conținutul din repository pentru a fi siguri
+COPY . /usr/share/nginx/html/
 
-# REPARARE: Redenumim login.html în index.html pentru a mulțumi Nginx și Koyeb
-RUN cp /usr/share/nginx/html/login.html /usr/share/nginx/html/index.html
+# Forțăm găsirea unui punct de intrare indiferent unde este ascuns
+# Această comandă caută primul fișier .html găsit în subfoldere și îl pune ca index
+RUN find /usr/share/nginx/html -name "login.html" -exec cp {} /usr/share/nginx/html/index.html \;
 
-# Opțional: Copiem și restul resurselor dacă există
-COPY ./opensource/static/ /usr/share/nginx/html/static/ || true
-
-# Permisiuni de citire
+# Setăm permisiuni globale
 RUN chmod -R 755 /usr/share/nginx/html
 
 EXPOSE 80
