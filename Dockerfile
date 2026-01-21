@@ -2,13 +2,11 @@ FROM python:3.9-slim
 WORKDIR /app
 COPY . .
 
-# Această linie instalează Flask chiar dacă nu există requirements.txt
 RUN pip install flask gunicorn
 
-# Setăm portul Koyeb
-ENV PORT=80
-EXPOSE 80
-
-# Pornim direct din folderul unde este serverul
+# Intrăm în folderul serverului
 WORKDIR /app/opensource/whois_server
-CMD ["python", "app.py"]
+
+# AICI TREBUIE NUMELE CORECT AL FIȘIERULUI
+# Schimbă main.py cu ce vezi tu pe GitHub în acel folder
+CMD ["python", "main.py"]
