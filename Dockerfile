@@ -1,15 +1,12 @@
 
 FROM nginx:alpine
-
-# Ștergem conținutul vechi
 RUN rm -rf /usr/share/nginx/html/*
 
-# Copiem tot conținutul proiectului
-COPY ./opensource/ /usr/share/nginx/html/
+# Copiem fișierele din folderul frontend în locația Nginx
+COPY ./opensource/frontend/ /usr/share/nginx/html/
 
-# VERIFICARE: Dacă fișierele tale sunt într-un folder numit 'templates' (specific Flask), 
-# trebuie să le scoatem la suprafață. Adaugă această linie dacă eroarea persistă:
-# RUN mv /usr/share/nginx/html/templates/* /usr/share/nginx/html/ || true
+# Dacă proiectul are nevoie de fișierele statice separat:
+COPY ./opensource/static/ /usr/share/nginx/html/static/
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
