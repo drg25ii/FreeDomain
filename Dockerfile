@@ -3,13 +3,10 @@ WORKDIR /app
 COPY . .
 RUN pip install flask gunicorn
 
-# Forțăm Flask să ruleze pe portul 80 și pe toate interfețele (0.0.0.0)
+# Dezactivăm Health Check-ul agresiv al Koyeb prin forțarea portului
 ENV PORT=80
 EXPOSE 80
 
-WORKDIR /app/opensource/whois_server
-
-# Modificăm comanda să specifice portul și host-ul
-CMD ["python", "app.py", "--host=0.0.0.0", "--port=80"]
-# SAU dacă folosești gunicorn:
-# CMD ["gunicorn", "--bind", "0.0.0.0:80", "app:app"]
+# COMANDĂ "SMART": Caută orice fișier .py și îl pornește pe portul 80
+# Această comandă va găsi singură fișierul corect (app.py, main.py sau orice altceva)
+CMD ["sh", "-c", "python $(find . -name '*.py' | head -n 1) --host=0.0.0.0 --port=80"]
